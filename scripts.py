@@ -14,10 +14,10 @@ def remove_chastisements(schoolkid):
 
 
 def create_commendation(schoolkid, subject_name):
-    global COMMENDATION
     year_of_study = schoolkid.year_of_study
+    group_letter = schoolkid.group_letter
     subject = Subject.objects.filter(title=subject_name, year_of_study=year_of_study).first()
-    lesson = Lesson.objects.filter(year_of_study=year_of_study, subject=subject, group_letter='А').first()
+    lesson = Lesson.objects.filter(year_of_study=year_of_study, subject=subject, group_letter=group_letter).first()
     lesson_date = lesson.date
     teacher = lesson.teacher
 
@@ -29,7 +29,9 @@ if __name__ == '__main__':
     name = 'Фролов Иван Григорьевич'  # Введите ФИО ученика
     subject_name = 'Музыка'  # Введите предмет для похвалы
     schoolkid = Schoolkid.objects.filter(full_name__contains=name).first()
-
-    fix_marks(schoolkid)  # Изменяем оценки 2 и 3 на 5
-    remove_chastisements(schoolkid)  # Удаляем замечания от учителей
-    create_commendation(schoolkid, subject_name)  # Добавляем похвалу для ученика
+    if not schoolkid:
+        print('Такого ученика нет')
+    else:
+        fix_marks(schoolkid)  # Изменяем оценки 2 и 3 на 5
+        remove_chastisements(schoolkid)  # Удаляем замечания от учителей
+        create_commendation(schoolkid, subject_name)  # Добавляем похвалу для ученика
